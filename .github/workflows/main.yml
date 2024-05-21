@@ -6,16 +6,23 @@ on:
       - main
   push:
     branches:
-      - dev
       - main
+      - dev
+
 jobs: # Telling what jobs we need to happen
   build: # Specify the building name and machine
     name: Build & Release
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       #1 Checkout repository
       - name: Checkout Repository
         uses: actions/checkout@v4
+        # list all content directory
+      - name: List directory contents
+        run: |
+          ls -la
+          ls -la sub-project/
+
       #2 Set up JDK
       - name: Set Up Java
         uses: actions/setup-java@v4
@@ -23,10 +30,14 @@ jobs: # Telling what jobs we need to happen
           java-version: 21
           distribution: "temurin"
           cache: "gradle"
-          cache-dependency-path: | # optional
-            sub-project/*.gradle*
-             sub-project/**/gradle-wrapper.properties
-      - run: ./gradlew build --no-daemon
+
+      - run: |
+          if [ -d "android" ]; then
+            ls android/app/build.gradle
+            ls android/gradle/wrapper/gradle-wrapper.properties
+          else
+            echo "Android directory does not exist"
+          fi
       #3 Set up Flutter
       - name: Set Up Flutter
         uses: subosito/flutter-action@v2
