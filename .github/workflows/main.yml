@@ -17,11 +17,6 @@ jobs: # Telling what jobs we need to happen
       #1 Checkout repository
       - name: Checkout Repository
         uses: actions/checkout@v4
-        # list all content directory
-      - name: List directory contents
-        run: |
-          ls -la
-          ls -la sub-project/
 
       #2 Set up JDK
       - name: Set Up Java
